@@ -1,0 +1,66 @@
+type Category @model {
+  id: ID!
+  categoryName: String!
+  img: String
+  products: [Product] @connection(name: "category")
+}
+
+type Product @model @auth(rules: [{ allow: owner, identityClaim: "sub" }]) {
+  id: ID!
+  pname: String!
+  img: String
+  pack: Int
+  size: String
+  unitPrice: Int!
+  currentInventory: Int
+  addToList: Boolean
+  toBuyNumber: Int
+  invenotryDate: String
+  listDate: String
+  purchaseComplete: Boolean
+  category: Category! @connection(name: "category")
+  primaryShop: Shop @connection(name: "shop")
+  user: User @connection(name: "user")
+  owner: String
+}
+
+type Shop @model {
+  id: ID!
+  shopName: String!
+  location: String!
+  products: [Product] @connection(name: "shop")
+}
+
+type List @model @auth(rules: [{ allow: owner, identityClaim: "sub" }]) {
+  id: ID!
+  createdDate: String!
+  completed: Boolean
+  products: [ProductList]
+  owner: String
+}
+
+type ProductList {
+  id: ID
+  pname: String!
+  img: String
+  pack: Int
+  size: String
+  unitPrice: Int!
+  currentInventory: Int
+  addToList: Boolean
+  toBuyNumber: Int
+  invenotryDate: String
+  purchaseComplete: Boolean
+  categoryName: String
+}
+
+type User @model {
+  id: ID!
+  username: String!
+  email: String!
+  registered: Boolean
+  shopName: String
+  createdAt: String
+  owner: String
+  products: [Product] @connection(name: "user", sortField: "pname")
+}

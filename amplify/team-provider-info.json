@@ -1,0 +1,20 @@
+{
+    "native": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-pastore-native-203533-authRole",
+            "UnauthRoleArn": "arn:aws:iam::341056481425:role/amplify-pastore-native-203533-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::341056481425:role/amplify-pastore-native-203533-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "amplify-pastore-native-203533-deployment",
+            "UnauthRoleName": "amplify-pastore-native-203533-unauthRole",
+            "StackName": "amplify-pastore-native-203533",
+            "StackId": "arn:aws:cloudformation:us-east-1:341056481425:stack/amplify-pastore-native-203533/c651a700-5f4a-11ea-9c6a-1272d872aba7",
+            "AmplifyAppId": "d10wui4z3r4d1v"
+        },
+        "categories": {
+            "auth": {
+                "pastored55fbdc1": {}
+            }
+        }
+    }
+}
