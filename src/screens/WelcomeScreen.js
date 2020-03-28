@@ -77,13 +77,13 @@ const WelcomeScreen = ({ navigation }) => {
         </ImageContainer>
 
         <Button onPress={() => navigation.navigate("login")}>
-          <Text>SignIn</Text>
+          <Text>Sign In</Text>
         </Button>
         <Button
           style={{ backgroundColor: "#ee4540" }}
           onPress={() => navigation.navigate("register")}
         >
-          <Text>SignUp</Text>
+          <Text>Register</Text>
         </Button>
       </ScrollView>
     </Container>

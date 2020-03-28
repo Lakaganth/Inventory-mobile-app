@@ -28,7 +28,7 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <Container>
-      <Title>Login</Title>
+      <Title>Sign In</Title>
       {errorState ? <ErrorModal /> : null}
       {/* {userSuccess ? <Success isActive={true} /> : null} */}
       <KeyboardShift>
@@ -55,11 +55,12 @@ const LoginScreen = ({ navigation }) => {
                 onChangeText={password => setPassword(password)}
               />
             </TextContainer>
+
             <Button
               style={{ backgroundColor: "#ee4540" }}
               onPress={handleSignin}
             >
-              <Text>Login</Text>
+              <Text>Submit</Text>
             </Button>
           </CardContainer>
         )}
@@ -83,7 +84,7 @@ const Title = styled.Text`
   text-align: center;
   font-size: 32px;
   color: white;
-  text-transform: uppercase;
+  text-transform: capitalize;
   /* width: 250px; */
 `;
 
@@ -98,7 +99,7 @@ const CardContainer = styled.View`
 `;
 
 const ImageContainer = styled.View`
-  width: ${windowWidth / 3.5}px;
+  width: ${windowWidth / 3}px;
   height: ${windowHeight / 5}px;
   align-self: center;
 `;

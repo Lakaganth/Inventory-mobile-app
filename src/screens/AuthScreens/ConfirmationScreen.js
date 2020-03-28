@@ -14,19 +14,29 @@ import {
 import KeyboardShift from "../../components/UI/KeyboardShift";
 import { useDispatch, useSelector } from "react-redux";
 import * as AuthActions from "../../../store/actions/authActions";
+import ErrorModal from "./../../components/UI/ErrorModal";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-const ConfirmationScreen = () => {
+const ConfirmationScreen = ({ route, navigation }) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [code, setCode] = useState("");
+  const userEmail = route.params.email;
+  const [err, setError] = useState("");
 
   const dispatch = useDispatch();
+  const errorState = useSelector(state => state.auth.error);
 
-  const user = useSelector(state => state.auth.currentUser);
+  useEffect(() => {
+    if (errorState) {
+      setError(errorState);
+    }
+  }, [errorState]);
+
+  const user = useSelector(state => state.auth.user);
 
   useEffect(() => {
     getCognitoUser();
@@ -38,14 +48,21 @@ const ConfirmationScreen = () => {
 
   const handleConfrimation = async () => {
     await dispatch(AuthActions.confirmRegister(email, code));
-    setEmail("");
-    setCode("");
+    console.log(err);
+    if (!err) {
+      navigation.navigate("login");
+    }
   };
+
+  const handleResendCode = async () => {
+    await dispatch(AuthActions.resendConfirmCode(userEmail));
+  };
+  console.log("user", user);
 
   return (
     <Container>
       <Title>Confirm Registration</Title>
-
+      {errorState ? <ErrorModal /> : null}
       <KeyboardShift>
         {() => (
           <CardContainer>
@@ -76,6 +93,9 @@ const ConfirmationScreen = () => {
             >
               <Text>Confirm</Text>
             </Button>
+            <TextButton onPress={handleResendCode}>
+              <Resend>Resend Code</Resend>
+            </TextButton>
           </CardContainer>
         )}
       </KeyboardShift>
@@ -149,6 +169,15 @@ const Button = styled.TouchableOpacity`
 `;
 const Text = styled.Text`
   color: white;
+  font-size: 18px;
+  text-align: center;
+  padding-top: 12px;
+`;
+
+const TextButton = styled.TouchableOpacity``;
+const Resend = styled.Text`
+  color: purple;
+  text-decoration: underline;
   font-size: 18px;
   text-align: center;
   padding-top: 12px;

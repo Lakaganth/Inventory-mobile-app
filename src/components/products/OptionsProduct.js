@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import * as ProductActions from "../../../store/actions/productActions";
 import * as CategoryActions from "../../../store/actions/categoryActions";
 
-import { MaterialIcons, Entypo } from "@expo/vector-icons";
+import { MaterialIcons, Entypo, FontAwesome } from "@expo/vector-icons";
 import { API, graphqlOperation } from "aws-amplify";
 import { onUpdateCategory } from "../../graphql/subscriptions";
 
@@ -37,8 +37,20 @@ const OptionsProduct = ({ pID, cID, owner, product, navigation }) => {
     navigation.navigate("EditProduct", { product });
   };
 
+  const handleGetQr = () => {
+    navigation.navigate("GetQR", { product });
+    // navigation.navigate("Cam", { product });
+  };
+
   return (
     <Container>
+      <OptionsRow>
+        <Button onPress={handleGetQr}>
+          <FontAwesome name="qrcode" size={28} color="#22EBD3" />
+        </Button>
+        <Text>Get QR Code</Text>
+      </OptionsRow>
+
       <OptionsRow>
         <Button onPress={handleUpdate}>
           <MaterialIcons name="update" size={28} color="#ffd700" />
@@ -59,7 +71,7 @@ export default OptionsProduct;
 
 const Container = styled.View`
   width: 320px;
-  height: 100px;
+  height: 130px;
   background-color: #313131;
   margin: 0px 50px 0 0;
   /* margin-right: ${width / 2}px; */

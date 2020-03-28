@@ -2,6 +2,7 @@ import { API, graphqlOperation } from "aws-amplify";
 import { listProducts } from "../../src/graphql/queries";
 import { createProduct, deleteProduct } from "../../src/graphql/mutations";
 import { updateProduct } from "./../../src/graphql/mutations";
+import { getProduct } from "./../../src/graphql/queries";
 
 export const GET_PRODUCT = "GET_PRODUCT";
 export const GET_ALL_PRODUCTS = "GET_ALL_PRODUCTS";
@@ -10,6 +11,8 @@ export const DELETE_PRODUCT = "DELETE_PRODUCT";
 export const UPDATE_PRODUCT = "UPDATE_PRODUCT";
 export const ERROR_PRODUCT = "ERROR_PRODUCT";
 export const RESET_ERROR_PRODUCT = "RESET_ERROR_PRODUCT";
+export const GET_SINGLE_PRODUCT = "GET_SINGLE_PRODUCT";
+export const CLEAR_SINGLE_PRODUCT = "CLEAR_SINGLE_PRODUCT";
 
 // export const getCategoryAWS = () => {
 //     return async dispatch =>{
@@ -82,6 +85,32 @@ export const editProductAWS = input => {
       const res = await API.graphql(graphqlOperation(updateProduct, { input }));
 
       console.log(res);
+    } catch (err) {
+      return dispatch({ type: ERROR_PRODUCT, error: err });
+    }
+  };
+};
+
+export const getSingleProduct = pID => {
+  return async dispatch => {
+    try {
+      const res = await API.graphql(graphqlOperation(getProduct, { id: pID }));
+
+      return dispatch({
+        type: GET_SINGLE_PRODUCT,
+        product: res.data.getProduct
+      });
+    } catch (err) {
+      return dispatch({ type: ERROR_PRODUCT, error: err });
+    }
+  };
+};
+export const ClearSingleProduct = pID => {
+  return async dispatch => {
+    try {
+      return dispatch({
+        type: CLEAR_SINGLE_PRODUCT
+      });
     } catch (err) {
       return dispatch({ type: ERROR_PRODUCT, error: err });
     }

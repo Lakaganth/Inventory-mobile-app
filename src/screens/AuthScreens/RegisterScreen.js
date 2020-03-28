@@ -27,7 +27,6 @@ const RegisterScreen = ({ navigation }) => {
 
   const dispatch = useDispatch();
   const errorState = useSelector(state => state.auth.error);
-  console.log("err", errorState);
 
   useEffect(() => {
     if (errorState) {
@@ -41,6 +40,10 @@ const RegisterScreen = ({ navigation }) => {
 
   const handleRegister = async () => {
     await dispatch(AuthActions.register(username, password, email));
+
+    if (!err) {
+      navigation.navigate("confirm", { email });
+    }
   };
 
   return (
@@ -83,7 +86,7 @@ const RegisterScreen = ({ navigation }) => {
               style={{ backgroundColor: "#801336" }}
               onPress={handleRegister}
             >
-              <Text>Register</Text>
+              <Text>Submit</Text>
             </Button>
           </CardContainer>
         )}
@@ -107,7 +110,7 @@ const Title = styled.Text`
   text-align: center;
   font-size: 32px;
   color: white;
-  text-transform: uppercase;
+  text-transform: capitalize;
   /* width: 250px; */
 `;
 

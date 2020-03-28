@@ -12,6 +12,7 @@ import { Provider, useDispatch } from "react-redux";
 import { YellowBox } from "react-native";
 import _ from "lodash";
 import listReducers from "./store/reducers/listReducers";
+import productReducers from "./store/reducers/productReducers";
 
 Amplify.configure(awsmobile);
 
@@ -26,7 +27,8 @@ console.warn = message => {
 const rootReducer = combineReducers({
   auth: authReducers,
   categories: categoryReducers,
-  list: listReducers
+  list: listReducers,
+  product: productReducers
 });
 
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));

@@ -15,8 +15,10 @@ import {
 const ListScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const allList = useSelector(state => state.list.lists);
+  // const [allList, setAllList] = useState(null);
   const user = useSelector(state => state.auth.user);
   // const [todayList, setTodayList] = useState("");
+  // console.log(allList.products);
 
   const todayDate = moment()
     .startOf("day")
@@ -26,6 +28,7 @@ const ListScreen = ({ navigation }) => {
 
   useEffect(() => {
     getListsRedux();
+
     const createListcreationListener = API.graphql(
       graphqlOperation(onCreateList, { owner: user.username })
     ).subscribe({
@@ -39,7 +42,9 @@ const ListScreen = ({ navigation }) => {
     ).subscribe({
       next: async listData => {
         const updatedData = listData.value.data.onUpdateList;
-        await dispatch(ListActions.updateListListnerAWS(updatedData, allList));
+        return await dispatch(
+          ListActions.updateListListnerAWS(updatedData, allList)
+        );
       }
     });
     const createListDeleteListener = API.graphql(
@@ -48,7 +53,7 @@ const ListScreen = ({ navigation }) => {
       next: async listData => {
         const updatedData = listData.value.data.onDeleteList;
         return await dispatch(
-          ListActions.updateListListnerAWS(updatedData, allList)
+          ListActions.deleteListListnerAWS(updatedData, allList)
         );
       }
     });
@@ -64,7 +69,6 @@ const ListScreen = ({ navigation }) => {
     await dispatch(ListActions.getAllListAWS());
   }, [dispatch, allList]);
 
-  console.log(allList);
   if (allList) {
     todayList = allList.filter(list => {
       const listDate = moment(list.createdDate).format("YYYY-MM-DD");

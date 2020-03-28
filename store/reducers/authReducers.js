@@ -28,8 +28,7 @@ export default (state = initialState, action) => {
     case GET_USER:
       return {
         ...state,
-        user: action.user.res,
-        currentUser: action.user.userAWS
+        user: action.user.res
       };
     case ERROR:
       return { ...state, error: action.error };

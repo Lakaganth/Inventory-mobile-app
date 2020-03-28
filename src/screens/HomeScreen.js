@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 import { ScrollView } from "react-native";
 import { TouchableNativeFeedback, TouchableOpacity } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -38,9 +39,31 @@ const HomeScreen = ({ navigation }) => {
     <Container>
       <ScrollView behaviour="height">
         <Title>Welcome Back, </Title>
+
         <TouchableNativeFeedback
           onPress={() => navigation.navigate("Category")}
         >
+          <ButtonContainer
+            style={{
+              shadowColor: "#fff",
+              shadowOffset: {
+                width: 0,
+                height: 2
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 3.84,
+              elevation: 5
+            }}
+          >
+            <ImageInventoryContainer>
+              <Image source={require("../../assets/images/inventory.png")} />
+            </ImageInventoryContainer>
+            <ButtonText>
+              <Text>Inventory</Text>
+            </ButtonText>
+          </ButtonContainer>
+        </TouchableNativeFeedback>
+        <TouchableNativeFeedback onPress={() => navigation.navigate("Cam")}>
           <ButtonContainer
             style={{
               shadowColor: "#fff",
@@ -57,7 +80,7 @@ const HomeScreen = ({ navigation }) => {
               <Image source={require("../../assets/images/scanner.png")} />
             </ImageScanContainer>
             <ButtonText>
-              <Text>Inventory</Text>
+              <Text>Scan QR</Text>
             </ButtonText>
           </ButtonContainer>
         </TouchableNativeFeedback>
@@ -122,6 +145,14 @@ const ImageScanContainer = styled.View`
   top: -60px;
   left: -50px;
 `;
+const ImageInventoryContainer = styled.View`
+  width: 230px;
+  height: 230px;
+  position: absolute;
+  top: -100px;
+  left: -70px;
+`;
+
 const ImageListContainer = styled.View`
   width: 125px;
   height: 125px;
@@ -140,4 +171,21 @@ const Text = styled.Text`
   padding-right: 30px;
   width: 200px;
   text-align: right;
+`;
+const SubText = styled.Text`
+  font-size: 25px;
+  color: white;
+  padding-right: 0px;
+  width: 200px;
+  text-align: right;
+`;
+
+const IconButton = styled.TouchableOpacity`
+  /* background-color: white;
+  width: 50%;
+  height: 50%; */
+  position: absolute;
+  top: 100px;
+  right: 60px;
+  z-index: 20;
 `;

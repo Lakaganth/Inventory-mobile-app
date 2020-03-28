@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 import { TouchableOpacity, Dimensions } from "react-native";
@@ -6,12 +6,14 @@ import { useDispatch, useSelector } from "react-redux";
 import * as AuthActions from "../../store/actions/authActions";
 import Success from "../components/UI/Success";
 import { MaterialCommunityIcons, Feather } from "@expo/vector-icons";
+import PasswordModal from "../components/UI/PasswordModal";
 
 const { width, height } = Dimensions.get("window");
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ navigation }) => {
   const user = useSelector(state => state.auth.user);
   const currentUser = useSelector(state => state.auth.currentUser);
+  const [changePassword, setChangePassword] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -19,20 +21,56 @@ const ProfileScreen = () => {
     await dispatch(AuthActions.userSignOut());
   };
 
+  const handleChangePassword = async () => {
+    setChangePassword(!changePassword);
+    // await dispatch(AuthActions.changePasswordAWS());
+  };
+
+  let verified = user.attributes.email_verified;
+  // verified = true;
+
+  // console.log(user);
+  // console.log("currentUser", currentUser);
+
   return (
     <Container>
+      {changePassword ? (
+        <PasswordModal
+          showModal={changePassword}
+          change={handleChangePassword}
+        />
+      ) : null}
       <ProfileCard>
         <ImageContainer>
           <Image
             source={require("../../assets/images/user/default_avatar.png")}
           />
         </ImageContainer>
-        <Title>{currentUser.data.getUser.username}</Title>
-        <SubTitle>{currentUser.data.getUser.email}</SubTitle>
+        {/* <Title>{currentUser.data.getUser.username}</Title>
+        <SubTitle>{currentUser.data.getUser.email}</SubTitle> */}
       </ProfileCard>
       <UserActions>
+        {!verified ? (
+          <ActionRow>
+            <Button
+              style={{ backgroundColor: "purple" }}
+              // onPress={() => navigation.navigate("email-confirmation")}
+            >
+              <MaterialCommunityIcons
+                name="email-alert"
+                size={23}
+                color="white"
+                style={{ alignSelf: "center", paddingTop: 7 }}
+              />
+            </Button>
+            <ActionName>Verify Email</ActionName>
+          </ActionRow>
+        ) : null}
         <ActionRow>
-          <Button style={{ backgroundColor: "orange" }}>
+          <Button
+            style={{ backgroundColor: "orange" }}
+            onPress={handleChangePassword}
+          >
             <MaterialCommunityIcons
               name="lock-reset"
               size={23}
@@ -40,7 +78,7 @@ const ProfileScreen = () => {
               style={{ alignSelf: "center", paddingTop: 7 }}
             />
           </Button>
-          <ActionName>Password Reset</ActionName>
+          <ActionName>Change Password</ActionName>
         </ActionRow>
         <ActionRow>
           <Button onPress={handleSignOut}>
@@ -68,6 +106,7 @@ export default ProfileScreen;
 const Container = styled.View`
   flex-grow: 1;
   background: #24273c;
+  position: relative;
 `;
 
 const ProfileCard = styled.View`

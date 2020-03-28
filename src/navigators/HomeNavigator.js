@@ -6,6 +6,9 @@ import ProductScreen from "./../screens/ProductScreen";
 import NewProductForm from "./../components/products/NewProductForm";
 import ListDetailScreen from "./../screens/ListDetailScreen";
 import EditProductForm from "./../components/products/EditProductForm";
+import CreateQR from "../components/qr/CreateQR";
+import Camera from "./../components/lists/Camera";
+import AddQRtoList from "./../components/qr/AddQRtoList";
 
 const Stack = createStackNavigator();
 
@@ -88,6 +91,22 @@ const HomeNavigator = () => {
         }}
       />
       <Stack.Screen
+        name="GetQR"
+        component={CreateQR}
+        options={{
+          title: "GET QR",
+          headerStyle: {
+            backgroundColor: "#161616"
+          },
+          headerTintColor: "white",
+          headerTitleAlign: "center",
+          headerTitleStyle: {
+            fontWeight: "bold"
+          }
+        }}
+      />
+
+      <Stack.Screen
         name="List"
         component={ListDetailScreen}
         options={{
@@ -96,6 +115,37 @@ const HomeNavigator = () => {
           },
           headerTintColor: "white",
           headerTitleAlign: "center",
+          headerTitleStyle: {
+            fontWeight: "bold",
+            width: "100%"
+          }
+        }}
+      />
+      <Stack.Screen
+        name="Cam"
+        component={Camera}
+        options={{
+          headerStyle: {
+            backgroundColor: "#161616"
+          },
+          headerTintColor: "white",
+          headerTitleAlign: "center",
+          headerTitleStyle: {
+            fontWeight: "bold",
+            width: "100%"
+          }
+        }}
+      />
+      <Stack.Screen
+        name="QRList"
+        component={AddQRtoList}
+        options={{
+          headerStyle: {
+            backgroundColor: "#161616"
+          },
+          headerTintColor: "white",
+          headerTitleAlign: "center",
+          headerBackTitle: "Go Back",
           headerTitleStyle: {
             fontWeight: "bold",
             width: "100%"

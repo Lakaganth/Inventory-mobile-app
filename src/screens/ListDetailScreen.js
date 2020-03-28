@@ -6,21 +6,28 @@ import ListDetailProductBox from "../components/lists/ListDetailProductBox";
 import { useSelector, useDispatch } from "react-redux";
 import * as ListActions from "../../store/actions/listActions";
 import * as CategoryAction from "../../store/actions/categoryActions";
-
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { BarCodeScanner } from "expo-barcode-scanner";
+import { StyleSheet } from "react-native";
 const { width, height } = Dimensions.get("window");
 
 const ListDetailScreen = ({ route, navigation }) => {
   const list = route.params.list;
-  const [optionsToggle, setOptionsToggle] = useState(false);
 
   const updatedList = useSelector(state => state.list.updatedList);
   const allList = useSelector(state => state.list.lists);
   const categories = useSelector(state => state.categories.categories);
   const dispatch = useDispatch();
+  const [hasPermission, setHasPermission] = useState(null);
+  const [scanned, setScanned] = useState(false);
 
   // Preload all categories
   useEffect(() => {
     getAllCategories();
+    (async () => {
+      const { status } = await BarCodeScanner.requestPermissionsAsync();
+      setHasPermission(status === "granted");
+    })();
   }, [dispatch]);
 
   const getAllCategories = useCallback(async () => {
@@ -68,6 +75,9 @@ const ListDetailScreen = ({ route, navigation }) => {
           ))}
         </Picker>
       </Filter>
+      <Button onPress={() => navigation.navigate("Cam")}>
+        <MaterialCommunityIcons name="qrcode-scan" color="#22EBD3" size={23} />
+      </Button>
     </>
   );
 
@@ -84,7 +94,7 @@ const ListDetailScreen = ({ route, navigation }) => {
           ListHeaderComponent={headerComp}
           ListFooterComponent={() => (
             <Submit onPress={handleSubmit}>
-              <Text>Submit</Text>
+              <Text>Finished</Text>
             </Submit>
           )}
           renderItem={({ item }) => (
@@ -102,7 +112,7 @@ const ListDetailScreen = ({ route, navigation }) => {
           ListHeaderComponent={headerComp}
           ListFooterComponent={() => (
             <Submit onPress={handleSubmit}>
-              <Text>Submit</Text>
+              <Text>Finished</Text>
             </Submit>
           )}
           renderItem={({ item }) => (
@@ -175,4 +185,14 @@ const CatTitle = styled.Text`
   color: white;
   padding: 20px;
   font-size: 18px;
+`;
+
+const Button = styled.TouchableOpacity`
+  /* background-color: white;
+  width: 50%;
+  height: 50%; */
+  position: absolute;
+  top: 100px;
+  right: 30px;
+  z-index: 20;
 `;

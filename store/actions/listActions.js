@@ -9,6 +9,7 @@ import moment from "moment";
 
 export const GET_ALL_LIST = "GET_ALL_LIST";
 export const CREATE_LIST = "CREATE_LIST";
+export const NEW_LIST = "NEW_LIST";
 export const DELETE_LIST = "DELETE_LIST";
 export const UPDATE_LIST = "UPDATE_LIST";
 export const UPDATE_PURCHASE_COMPLETE = "UPDATE_PURCHASE_COMPLETE";
@@ -51,7 +52,8 @@ export const addtoListAWS = productList => {
       //    Create new List
       if (getList.data.listLists.items.length <= 0) {
         const res = await API.graphql(graphqlOperation(createList, { input }));
-        console.log("NEW", res);
+        console.log("NEW", res.data.createList);
+        return dispatch({ type: NEW_LIST, newList: res.data.createList });
       } else {
         const existinglist = getList.data.listLists.items[0];
 
@@ -59,6 +61,7 @@ export const addtoListAWS = productList => {
 
         const prodExistsIndex = prod.findIndex(p => p.id == productList.id);
         console.log(prodExistsIndex);
+
         if (prodExistsIndex >= 0) {
           prod.splice(prodExistsIndex, 1, productList);
         } else if (prodExistsIndex == -1) {
@@ -77,7 +80,11 @@ export const addtoListAWS = productList => {
         const updatedList = await API.graphql(
           graphqlOperation(updateList, { input })
         );
-        // console.log("Existing", updatedList);
+        console.log("Existing", updatedList.data.updateList);
+        return dispatch({
+          type: UPDATE_LIST,
+          list: updatedList.data.updateList
+        });
       }
     } catch (err) {
       return dispatch({ type: ERROR_LIST, error: err });
@@ -103,7 +110,6 @@ export const setPurchaseComplete = (pID, lists, purchaseState) => {
     try {
       lists.products.forEach(prod => {
         if (prod.id == pID) {
-          console.log("Hello");
           prod.purchaseComplete = purchaseState;
         }
       });
@@ -143,7 +149,6 @@ export const deleteListAWS = lID => {
       const input = {
         id: lID
       };
-      console.log(input);
 
       await API.graphql(graphqlOperation(deleteList, { input }));
     } catch (err) {
@@ -174,39 +179,40 @@ export const deleteProductFromListAWS = (pID, currentList) => {
 export const createListListnerAWS = listCreatedData => {
   return async dispatch => {
     try {
-      console.log("ACtion create", listCreatedData);
+      return dispatch({
+        type: CREATE_LIST_LISTENER,
+        updatedList: listCreatedData
+      });
     } catch (err) {
-      return dispatch({ type: ERROR_CATEGORY, error: err });
+      return dispatch({ type: ERROR_LIST, error: err });
     }
   };
 };
 export const updateListListnerAWS = (listUpdatedData, allList) => {
   return async dispatch => {
     try {
-      // console.log("ACtion create", listUpdatedData);
       const listIndex = allList.findIndex(
         list => list.id == listUpdatedData.id
       );
       allList.splice(listIndex, 1, listUpdatedData);
-      console.log(allList);
+
       return dispatch({ type: UPDATE_LIST_LISTENER, updatedList: allList });
     } catch (err) {
-      return dispatch({ type: ERROR_CATEGORY, error: err });
+      return dispatch({ type: ERROR_LIST, error: err });
     }
   };
 };
 export const deleteListListnerAWS = (listUpdatedData, allList) => {
   return async dispatch => {
     try {
-      console.log("ACtion create", listUpdatedData);
       const listIndex = allList.findIndex(
         list => list.id == listUpdatedData.id
       );
-      allList.splice(listIndex, 1, listUpdatedData);
+      allList.splice(listIndex, 1);
       console.log(allList);
-      return dispatch({ type: UPDATE_LIST_LISTENER, updatedList: allList });
+      return dispatch({ type: DELETE_LIST_LISTENER, updatedList: allList });
     } catch (err) {
-      return dispatch({ type: ERROR_CATEGORY, error: err });
+      return dispatch({ type: ERROR_LIST, error: err });
     }
   };
 };

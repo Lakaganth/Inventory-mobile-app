@@ -10,6 +10,7 @@ const { width, height } = Dimensions.get("window");
 
 const ListBox = ({ list }) => {
   const [optionsToggle, setOptionsToggle] = useState(false);
+  
   const totalArr = list.products.reduce(
     (total, prod) => total + prod.toBuyNumber * prod.unitPrice,
     0
